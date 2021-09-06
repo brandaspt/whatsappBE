@@ -3,7 +3,7 @@ import { IMessageDocument } from "./messages"
 
 export interface IGroup {
   title: string
-  messageHistory: [string]
+  messageHistory: any
   avatar: string
   description?: string
   background?: string

@@ -4,9 +4,9 @@ import { IPrivateGroupDocument } from "../../typings/privateGroup"
 const { Schema, model } = mongoose
 
 const PrivateGroupSchema = new Schema<IPrivateGroupDocument>({
-  users: [String],
+  users: [{ type: Schema.Types.ObjectId, ref: "User" }],
   messageHistory: {
-    type: [String],
+    type: [Schema.Types.ObjectId],
     ref: "Message",
   },
 })

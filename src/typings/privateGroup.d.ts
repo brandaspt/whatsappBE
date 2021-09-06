@@ -3,7 +3,7 @@ import { IMessageDocument } from "./messages"
 
 export interface IPrivateGroup {
   users: [string, string]
-  messageHistory: [string]
+  messageHistory: any
 }
 
 export interface IPrivateGroupDocument extends Document, IPrivateGroup {}

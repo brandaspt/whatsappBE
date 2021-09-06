@@ -10,7 +10,8 @@ const GroupSchema = new Schema<IGroupDocument>(
       required: true,
     },
     messageHistory: {
-      type: [String],
+      type: [Schema.Types.ObjectId],
+      ref: "Message",
     },
     avatar: {
       type: String,
@@ -21,7 +22,7 @@ const GroupSchema = new Schema<IGroupDocument>(
     background: String,
     users: [
       {
-        userId: String,
+        userId: { type: Schema.Types.ObjectId, ref: "User" },
         role: {
           type: ["admin", "guest"],
           default: "guest",
