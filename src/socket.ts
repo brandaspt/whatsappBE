@@ -3,7 +3,6 @@ import { Server } from "socket.io"
 import app from "./server"
 import MessageModel from "./services/messages/model"
 import GroupsModel from "./services/groups/model"
-import PrivateGroupsModel from "./services/privateGroups/model"
 
 const server = createServer(app)
 
@@ -26,22 +25,14 @@ io.on("connection", (socket) => {
     socket.join(groups)
   })
 
-  socket.on("sendMessage", async ({ message, room, group }) => {
+  socket.on("sendMessage", async ({ message, room }) => {
     const newMessage = await new MessageModel(message).save()
 
-    if (group) {
-      await GroupsModel.findByIdAndUpdate(room, {
-        $push: {
-          messageHistory: newMessage._id,
-        },
-      })
-    } else {
-      await PrivateGroupsModel.findByIdAndUpdate(room, {
-        $push: {
-          messageHistory: newMessage._id,
-        },
-      })
-    }
+    await GroupsModel.findByIdAndUpdate(room, {
+      $push: {
+        messageHistory: newMessage._id,
+      },
+    })
 
     socket.to(room).emit("message", newMessage)
   })

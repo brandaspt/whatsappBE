@@ -1,5 +1,6 @@
 import mongoose from "mongoose"
 import { IGroupDocument } from "src/typings/group"
+import { MessageSchema } from "../messages/model"
 
 const { Schema, model } = mongoose
 
@@ -7,12 +8,9 @@ const GroupSchema = new Schema<IGroupDocument>(
   {
     title: {
       type: String,
-      required: true,
+      required: false,
     },
-    messageHistory: {
-      type: [Schema.Types.ObjectId],
-      ref: "Message",
-    },
+    messageHistory: [MessageSchema],
     avatar: {
       type: String,
       default:

@@ -3,7 +3,7 @@ import { IMessageDocument } from "../../typings/messages"
 
 const { Schema, model } = mongoose
 
-const MessageSchema = new Schema<IMessageDocument>(
+export const MessageSchema = new Schema<IMessageDocument>(
   {
     content: String,
     attachments: [String],
