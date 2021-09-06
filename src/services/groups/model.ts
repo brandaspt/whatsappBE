@@ -43,4 +43,4 @@ GroupSchema.methods.toJSON = function () {
   return group
 }
 
-export default model<IGroupDocument>("User", GroupSchema)
+export default model<IGroupDocument>("Group", GroupSchema)
