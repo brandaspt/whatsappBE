@@ -1,7 +1,7 @@
 import mongoose from "mongoose"
 import { IMessageDocument } from "../../typings/messages"
 
-const { Schema, model } = mongoose
+const { Schema } = mongoose
 
 export const MessageSchema = new Schema<IMessageDocument>(
   {
@@ -17,5 +17,3 @@ export const MessageSchema = new Schema<IMessageDocument>(
   },
   { timestamps: true }
 )
-
-export default model<IMessageDocument>("Message", MessageSchema)

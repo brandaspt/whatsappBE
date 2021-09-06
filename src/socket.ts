@@ -1,7 +1,6 @@
 import { createServer } from "http"
 import { Server } from "socket.io"
 import app from "./server"
-import MessageModel from "./services/messages/model"
 import GroupsModel from "./services/groups/model"
 
 const server = createServer(app)
@@ -26,7 +25,7 @@ io.on("connection", (socket) => {
   })
 
   socket.on("sendMessage", async ({ message, room }) => {
-    const newMessage = await new MessageModel(message).save()
+    const newMessage = { ...message }
 
     await GroupsModel.findByIdAndUpdate(room, {
       $push: {
