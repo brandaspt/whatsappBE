@@ -1,7 +1,6 @@
 // Packages
 import createError from "http-errors"
 import { TController } from "src/typings/controllers"
-import User from './model'
 
 // Model
 import UserModel from "./model"
@@ -12,7 +11,7 @@ export const getMe: TController = async (req, res, next) => {
 
 export const getAll: TController = async (req, res, next) => {
   try {
-    const users = await User.find()
+    const users = await UserModel.find()
     res.send(users)
   } catch (error) {
     next(createError(500, "An Error ocurred while getting the list of users"))
@@ -21,7 +20,7 @@ export const getAll: TController = async (req, res, next) => {
 
 export const getSingle: TController = async (req, res, next) => {
   try {
-    const user = await User.findById(req.params.id)
+    const user = await UserModel.findById(req.params.id)
     if(user) {
       res.send(user)
     } else {
@@ -34,7 +33,7 @@ export const getSingle: TController = async (req, res, next) => {
 
 export const editUser: TController = async (req, res, next) => {
   try {
-    const modifiedUser = await User.findByIdAndUpdate(req.params.id, req.body, {new: true, runValidators: true})
+    const modifiedUser = await UserModel.findByIdAndUpdate(req.params.id, req.body, {new: true, runValidators: true})
 
     if(modifiedUser) {
       res.send(modifiedUser)
@@ -62,7 +61,7 @@ export const editMe: TController = async (req, res, next) => {
 
 export const deleteUser: TController = async (req, res, next) => {
   try {
-    const deletedUser = await User.findByIdAndDelete(req.params.id)
+    const deletedUser = await UserModel.findByIdAndDelete(req.params.id)
 
     if(deletedUser) {
       res.status(204).send()
@@ -86,7 +85,7 @@ export const deleteMe: TController = async (req, res, next) => {
 export const uploadAvatar: TController = async (req, res, next) => {
   try {
     
-    const modifiedUser = await User.findByIdAndUpdate(req.params.id, {$set: {avatar: req.file?.path} }, {new: true, runValidators: true} )
+    const modifiedUser = await UserModel.findByIdAndUpdate(req.params.id, {$set: {avatar: req.file?.path} }, {new: true, runValidators: true} )
     if(modifiedUser) {
       res.send(modifiedUser)
     } else {
@@ -100,11 +99,8 @@ export const uploadAvatar: TController = async (req, res, next) => {
 
 export const uploadAvatarMe: TController = async (req, res, next) => {
   try {
-    
     // const modifiedUser = await req.user?.updateOne({$set: {avatar: req.file?.path} })
-    const modifiedUser = await User.findByIdAndUpdate(req.user?._id, {$set: {avatar: req.file?.path} }, {new: true, runValidators: true} )
-    console.log(req.file?.path)
-    console.log(User.findById(req.user?._id));
+    const modifiedUser = await UserModel.findByIdAndUpdate(req.user?._id, {$set: {avatar: req.file?.path} }, {new: true, runValidators: true} )
     
     if(modifiedUser) {
       
