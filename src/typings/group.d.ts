@@ -9,7 +9,7 @@ export interface IGroup {
   background?: string
   users: [
     {
-      userId: Schema.Types.ObjectId
+      _id: Schema.Types.ObjectId
       role: string
       banned: boolean
     }

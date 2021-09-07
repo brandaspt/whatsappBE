@@ -5,7 +5,7 @@ export interface IMessage {
   content?: string
   attachments: [string]
   sender: Schema.Types.ObjectId
-  replyTo?: Schema.Types.ObjectId
+  replyTo?: number
   deleted?: boolean
 }
 

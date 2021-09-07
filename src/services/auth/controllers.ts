@@ -5,7 +5,7 @@ import { refreshTokens } from "./tools"
 import UserModel from "../users/model"
 
 export const refresh: TController = async (req, res, next) => {
-  const { refreshToken } = req.body
+  const { refreshToken } = req.cookies
   if (!refreshToken) return next(createError(400, "Refresh token must be provided"))
   try {
     const tokens = await refreshTokens(refreshToken)
