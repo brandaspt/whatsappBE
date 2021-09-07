@@ -16,7 +16,7 @@ const avatarStorage = new CloudinaryStorage({
   cloudinary,
   params: async (req, file) => {
     return {
-      folder: `WhatsAppUser/Avatars/${req.user?._id}`,
+      folder: `WhatsAppUser/Avatars`,
     }
   },
 })
