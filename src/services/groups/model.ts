@@ -1,8 +1,23 @@
 import mongoose from "mongoose"
 import { IGroupDocument } from "src/typings/group"
-import { MessageSchema } from "../messages/model"
+import { IMessageDocument } from "src/typings/messages"
 
 const { Schema, model } = mongoose
+
+const MessageSchema = new Schema<IMessageDocument>(
+  {
+    content: String,
+    attachments: [String],
+    sender: {
+      type: Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+    },
+    replyTo: { type: Schema.Types.ObjectId, ref: "Message" },
+    deleted: { type: Boolean, default: false },
+  },
+  { timestamps: true }
+)
 
 const GroupSchema = new Schema<IGroupDocument>(
   {
