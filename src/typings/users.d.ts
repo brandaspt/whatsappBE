@@ -1,10 +1,11 @@
 import mongoose, { Document, Model, Schema } from "mongoose"
+import { IGroupDocument } from "./group"
 
 export interface IUser {
   name: string
   surname: string
   email: string
-  groups: [string]
+  groups: Schema.Types.ObjectId[]
   password?: string
   avatar?: string
   bio?: string

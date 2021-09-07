@@ -13,7 +13,7 @@ const MessageSchema = new Schema<IMessageDocument>(
       ref: "User",
       required: true,
     },
-    replyTo: { type: Schema.Types.ObjectId, ref: "Message" },
+    // replyTo: { type: Schema.Types.ObjectId, ref: "Message" },
     deleted: { type: Boolean, default: false },
   },
   { timestamps: true }

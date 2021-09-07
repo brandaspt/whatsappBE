@@ -1,4 +1,4 @@
-import { Document } from "mongoose"
+import { Document, Schema } from "mongoose"
 import { IMessageDocument } from "./messages"
 
 export interface IGroup {
@@ -9,7 +9,7 @@ export interface IGroup {
   background?: string
   users: [
     {
-      userId: string
+      userId: Schema.Types.ObjectId
       role: ["admin", "guest"]
       banned: boolean
     }

@@ -22,10 +22,12 @@ const UserSchema = new Schema<IUserDocument, IUserModel>(
       unique: true,
       required: true,
     },
-    groups: {
-      type: [String],
-      ref: "Group",
-    },
+    groups: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "Group",
+      },
+    ],
     password: String,
     avatar: String,
     bio: String,
