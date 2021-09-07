@@ -11,6 +11,7 @@ const router = Router()
 router.get("/me", JWTAuthMiddleware, controllers.getMe)
 router.put("/:me", JWTAuthMiddleware, controllers.editMe)
 router.delete("/:me", JWTAuthMiddleware, controllers.deleteMe)
+router.post("/:me/uploadAvatar", JWTAuthMiddleware, controllers.uploadAvatarMe)
 
 // General Routes
 router.get("/", JWTAuthMiddleware, controllers.getAll)

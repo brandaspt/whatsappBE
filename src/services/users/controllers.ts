@@ -85,11 +85,30 @@ export const deleteMe: TController = async (req, res, next) => {
 
 export const uploadAvatar: TController = async (req, res, next) => {
   try {
-    console.log(req.file)
     
-    const user = await User.findByIdAndUpdate(req.params.id, {avatar: req.file?.path}, {new: true, runValidators: true} )
-    if(user) {
-      res.send(user)
+    const modifiedUser = await User.findByIdAndUpdate(req.params.id, {$set: {avatar: req.file?.path} }, {new: true, runValidators: true} )
+    if(modifiedUser) {
+      res.send(modifiedUser)
+    } else {
+      next(createError(404, "user Not Found!"))
+    }
+  } catch (error) {
+    console.log(error);
+    next(createError(500, "An Error ocurred while uploading avatar image to user"))
+  }
+}
+
+export const uploadAvatarMe: TController = async (req, res, next) => {
+  try {
+    
+    // const modifiedUser = await req.user?.updateOne({$set: {avatar: req.file?.path} })
+    const modifiedUser = await User.findByIdAndUpdate(req.user?._id, {$set: {avatar: req.file?.path} }, {new: true, runValidators: true} )
+    console.log(req.file?.path)
+    console.log(User.findById(req.user?._id));
+    
+    if(modifiedUser) {
+      
+      res.send(modifiedUser)
     } else {
       next(createError(404, "user Not Found!"))
     }
