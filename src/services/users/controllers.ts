@@ -11,7 +11,7 @@ export const getMe: TController = async (req, res, next) => {
 
 export const getAll: TController = async (req, res, next) => {
   try {
-    const users = await UserModel.find()
+    const users = await UserModel.find().populate("groups", { title: 1, avatar: 1})
     res.send(users)
   } catch (error) {
     next(createError(500, "An Error ocurred while getting the list of users"))
@@ -20,7 +20,7 @@ export const getAll: TController = async (req, res, next) => {
 
 export const getSingle: TController = async (req, res, next) => {
   try {
-    const user = await UserModel.findById(req.params.id)
+    const user = await UserModel.findById(req.params.id).populate("groups", { title: 1, avatar: 1})
     if(user) {
       res.send(user)
     } else {
