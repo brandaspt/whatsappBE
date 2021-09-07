@@ -1,6 +1,7 @@
 import { Document } from "mongoose"
 
 export interface IMessage {
+  _id: number
   content?: string
   attachments: [string]
   sender: Schema.Types.ObjectId

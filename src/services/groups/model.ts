@@ -4,8 +4,11 @@ import { IMessageDocument } from "src/typings/messages"
 
 const { Schema, model } = mongoose
 
+const AutoIncrement = require("mongoose-sequence")(mongoose)
+
 const MessageSchema = new Schema<IMessageDocument>(
   {
+    _id: Number,
     content: String,
     attachments: [String],
     sender: {
@@ -13,11 +16,13 @@ const MessageSchema = new Schema<IMessageDocument>(
       ref: "User",
       required: true,
     },
-    // replyTo: { type: Schema.Types.ObjectId, ref: "Message" },
+    replyTo: Schema.Types.ObjectId,
     deleted: { type: Boolean, default: false },
   },
-  { timestamps: true }
+  { timestamps: true, _id: false }
 )
+
+MessageSchema.plugin(AutoIncrement)
 
 const GroupSchema = new Schema<IGroupDocument>(
   {
@@ -37,8 +42,8 @@ const GroupSchema = new Schema<IGroupDocument>(
       {
         userId: { type: Schema.Types.ObjectId, ref: "User" },
         role: {
-          type: ["admin", "guest"],
-          default: "guest",
+          enum: ["ADMIN", "GUEST"],
+          default: "GUEST",
         },
         banned: {
           type: Boolean,
@@ -46,6 +51,11 @@ const GroupSchema = new Schema<IGroupDocument>(
         },
       },
     ],
+    closed: Boolean,
+    groupType: {
+      enum: ["PRIVATE, PUBLIC"],
+      required: true,
+    },
   },
   { timestamps: true }
 )

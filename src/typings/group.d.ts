@@ -1,19 +1,21 @@
 import { Document, Schema } from "mongoose"
-import { IMessageDocument } from "./messages"
+import { IMessage } from "./messages"
 
 export interface IGroup {
   title: string
-  messageHistory: any
+  messageHistory: IMessage[]
   avatar: string
   description?: string
   background?: string
   users: [
     {
       userId: Schema.Types.ObjectId
-      role: ["admin", "guest"]
+      role: string
       banned: boolean
     }
   ]
+  closed?: boolean
+  groupType: string
 }
 
 export interface IGroupDocument extends Document, IGroup {}
