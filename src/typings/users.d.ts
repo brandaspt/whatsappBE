@@ -9,6 +9,7 @@ export interface IUser {
   password?: string
   avatar?: string
   bio?: string
+  status?: string
   refreshToken?: string
 }
 
