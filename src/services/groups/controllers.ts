@@ -171,10 +171,10 @@ export const leaveGroup: TController = async (req, res, next) => {
 export const newMessage: TController = async (req, res, next) => {
   const user: IUserDocument | undefined = req.user
   try {
-    const testMessage = { ...req.body, sender: user?._id }
+    const message = { ...req.body, sender: user?._id }
 
     await GroupModel.findByIdAndUpdate(req.params.id, {
-      $push: { messageHistory: testMessage },
+      $push: { messageHistory: message },
     })
     res.sendStatus(200)
   } catch (error) {
