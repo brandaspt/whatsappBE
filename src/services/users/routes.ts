@@ -19,8 +19,5 @@ router.get("/:id", JWTAuthMiddleware, controllers.getSingle)
 router.put("/:id", JWTAuthMiddleware, controllers.editUser)
 router.delete("/:id", JWTAuthMiddleware, controllers.deleteUser)
 router.post("/:id/uploadAvatar", JWTAuthMiddleware, avatarParser.single("avatar"), controllers.uploadAvatar)
-
-
-
-
+router.get("/me/chats", JWTAuthMiddleware, controllers.getChats)
 export default router
