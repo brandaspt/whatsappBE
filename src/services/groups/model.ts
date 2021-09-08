@@ -13,7 +13,7 @@ const MessageSchema = new Schema<IMessageDocument>(
       ref: "User",
       required: true,
     },
-    // replyTo: { type: Schema.Types.ObjectId, ref: "Message" },
+    replyTo: Schema.Types.ObjectId,
     deleted: { type: Boolean, default: false },
   },
   { timestamps: true }
@@ -28,17 +28,16 @@ const GroupSchema = new Schema<IGroupDocument>(
     messageHistory: [MessageSchema],
     avatar: {
       type: String,
-      default:
-        "https://www.google.com/url?sa=i&url=http%3A%2F%2Fgetdrawings.com%2Fwhatsapp-group-icon-images-for-friends&psig=AOvVaw3MjmykrKIX7R8MgE0LFdGL&ust=1631007723474000&source=images&cd=vfe&ved=0CAsQjRxqFwoTCKCZq7-H6vICFQAAAAAdAAAAABAD",
     },
     description: String,
     background: String,
     users: [
       {
-        userId: { type: Schema.Types.ObjectId, ref: "User" },
+        _id: { type: Schema.Types.ObjectId, ref: "User" },
         role: {
-          type: ["admin", "guest"],
-          default: "guest",
+          type: String,
+          enum: ["ADMIN", "GUEST"],
+          default: "GUEST",
         },
         banned: {
           type: Boolean,
@@ -46,6 +45,12 @@ const GroupSchema = new Schema<IGroupDocument>(
         },
       },
     ],
+    closed: Boolean,
+    groupType: {
+      type: String,
+      enum: ["PRIVATE", "PUBLIC"],
+      required: true,
+    },
   },
   { timestamps: true }
 )
