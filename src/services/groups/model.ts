@@ -4,11 +4,8 @@ import { IMessageDocument } from "src/typings/messages"
 
 const { Schema, model } = mongoose
 
-const AutoIncrement = require("mongoose-sequence")(mongoose)
-
 const MessageSchema = new Schema<IMessageDocument>(
   {
-    _id: Number,
     content: String,
     attachments: [String],
     sender: {
@@ -19,10 +16,8 @@ const MessageSchema = new Schema<IMessageDocument>(
     replyTo: Schema.Types.ObjectId,
     deleted: { type: Boolean, default: false },
   },
-  { timestamps: true, _id: false }
+  { timestamps: true }
 )
-
-MessageSchema.plugin(AutoIncrement)
 
 const GroupSchema = new Schema<IGroupDocument>(
   {
