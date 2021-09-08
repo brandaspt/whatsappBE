@@ -23,8 +23,7 @@ export const createGroup: TController = async (req, res, next) => {
 
   const avatar = req.body.user
     ? null
-    : "https://www.google.com/url?sa=i&url=http%3A%2F%2Fgetdrawings.com%2Fwhatsapp-group-icon-images-for-friends&psig=AOvVaw3MjmykrKIX7R8MgE0LFdGL&ust=1631007723474000&source=images&cd=vfe&ved=0CAsQjRxqFwoTCKCZq7-H6vICFQAAAAAdAAAAABAD"
-
+    : "https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg"
   const newGroup = {
     ...req.body,
     users: groupUsers,
@@ -172,7 +171,7 @@ export const leaveGroup: TController = async (req, res, next) => {
 export const newMessage: TController = async (req, res, next) => {
   const user: IUserDocument | undefined = req.user
   try {
-    const testMessage = { sender: user?._id }
+    const testMessage = { ...req.body, sender: user?._id }
 
     await GroupModel.findByIdAndUpdate(req.params.id, {
       $push: { messageHistory: testMessage },
