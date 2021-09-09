@@ -45,7 +45,7 @@ const GroupSchema = new Schema<IGroupDocument>(
         },
       },
     ],
-    closed: Boolean,
+    closed: { type: Boolean, default: false },
     groupType: {
       type: String,
       enum: ["PRIVATE", "PUBLIC"],
