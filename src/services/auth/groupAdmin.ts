@@ -48,3 +48,54 @@ export const publicGroupOnly: TController = async (req, res, next) => {
     next(error)
   }
 }
+
+export const groupMemberOnly: TController = async (req, res, next) => {
+  const groupId = req.params.id
+  const user: IUserDocument | undefined = req.user
+  try {
+    const group: IGroupDocument | null = res.locals.group
+      ? res.locals.group
+      : await GroupModel.findById(groupId)
+    if (group) {
+      res.locals.group = group
+      if (group.users.find((u) => u._id.toString() === user?._id.toString())) {
+        next()
+      } else {
+        next(createError(401))
+      }
+    } else {
+      next(createError(404))
+    }
+  } catch (error) {
+    next(error)
+  }
+}
+
+export const myMessageOnly: TController = async (req, res, next) => {
+  const groupId = req.params.id
+  const messageId = req.params.mId
+  const user: IUserDocument | undefined = req.user
+  try {
+    const group: IGroupDocument | null = res.locals.group
+      ? res.locals.group
+      : await GroupModel.findById(groupId)
+    if (group) {
+      res.locals.group = group
+      if (
+        group.messageHistory.find(
+          (m) =>
+            m._id?.toString() === messageId &&
+            m.sender.toString() === user?._id.toString()
+        )
+      ) {
+        next()
+      } else {
+        next(createError(401))
+      }
+    } else {
+      next(createError(404))
+    }
+  } catch (error) {
+    next(error)
+  }
+}
