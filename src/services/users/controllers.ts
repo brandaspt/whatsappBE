@@ -131,16 +131,7 @@ export const getChats: TController = async (req, res, next) => {
     const myChats = await GroupModel.find(
       { "users._id": user?._id },
       { messageHistory: { $slice: -1 } }
-    )
-
-    // const groups = populatedUser?.groups
-    // const populatedUser = (
-    //   await UserModel.findById(user?._id).populate("groups")
-    // )?.toObject()
-
-    // const chatResponse = groups?.map((c: any) => {
-    //   return { ...c, messageHistory: c.messageHistory[c.messageHistory.length - 1] }
-    // })
+    ).populate("users._id", "name surname avatar email")
 
     res.send(myChats)
   } catch (error) {
