@@ -21,9 +21,7 @@ export const createGroup: TController = async (req, res, next) => {
       ]
     : [{ _id: user?._id, role: "ADMIN" }]
 
-  const avatar = req.body.user
-    ? null
-    : "https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg"
+  const avatar = req.body.user ? null : "https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg"
   const newGroup = {
     ...req.body,
     users: groupUsers,
@@ -43,11 +41,25 @@ export const getSingleGroup: TController = async (req, res, next) => {
   try {
     const group: IGroupDocument | null = await GroupModel.findById(req.params.id)
     if (group) {
-      if (
-        group?.closed === false ||
-        group.users.some((u) => u._id.toString() === user?._id.toString())
-      ) {
+      if (group?.closed === false || group.users.some(u => u._id.toString() === user?._id.toString())) {
         res.send(group)
+      } else {
+        res.sendStatus(401)
+      }
+    } else {
+      res.send(createError(404))
+    }
+  } catch (error) {
+    next(error)
+  }
+}
+export const getSingleGroupHistory: TController = async (req, res, next) => {
+  const user: IUserDocument | undefined = req.user
+  try {
+    const group: IGroupDocument | null = await GroupModel.findById(req.params.id)
+    if (group) {
+      if (group?.closed === false || group.users.some(u => u._id.toString() === user?._id.toString())) {
+        res.send(group.messageHistory)
       } else {
         res.sendStatus(401)
       }
@@ -64,7 +76,7 @@ export const editGroup: TController = async (req, res, next) => {
   const group: IGroupDocument = res.locals.group
   try {
     if (group) {
-      if (group.users.some((u) => u._id.toString() === user?._id.toString())) {
+      if (group.users.some(u => u._id.toString() === user?._id.toString())) {
         const newGroup = { ...group, ...req.body }
 
         const updatedGroup = await GroupModel.findByIdAndUpdate(group._id, newGroup, {
@@ -102,11 +114,9 @@ export const invitePeople: TController = async (req, res, next) => {
 
     // ADD THE UPDATING OF USERS
 
-    const existingIds = group.users.map((u) => u._id.toString())
+    const existingIds = group.users.map(u => u._id.toString())
 
-    const notExistingUsers = newUsers.filter(
-      (u: any) => !existingIds.includes(u.toString())
-    )
+    const notExistingUsers = newUsers.filter((u: any) => !existingIds.includes(u.toString()))
 
     const allGroupUsers = [
       ...group.users,
@@ -127,10 +137,7 @@ export const banUser: TController = async (req, res, next) => {
   try {
     // ADD A CHECK TO BE ABLE TO BAN ONLY NON ADMINS
 
-    await GroupModel.updateOne(
-      { _id: group._id, "users._id": req.params.uId },
-      { $set: { "users.$.banned": true } }
-    )
+    await GroupModel.updateOne({ _id: group._id, "users._id": req.params.uId }, { $set: { "users.$.banned": true } })
     res.sendStatus(201)
   } catch (error) {
     next(error)
@@ -151,9 +158,7 @@ export const deleteGroup: TController = async (req, res, next) => {
 export const leaveGroup: TController = async (req, res, next) => {
   const group: IGroupDocument = res.locals.group
   try {
-    const newUsers = group.users.filter(
-      (u: any) => u._id.toString() !== (req.user as IUserDocument)._id.toString()
-    )
+    const newUsers = group.users.filter((u: any) => u._id.toString() !== (req.user as IUserDocument)._id.toString())
 
     // ADD A CHECK THAT DOESNT LET THE LAST ADMIN LEAVE THE GROUP
 
@@ -173,10 +178,10 @@ export const newMessage: TController = async (req, res, next) => {
   try {
     const message = { ...req.body, sender: user?._id }
 
-    await GroupModel.findByIdAndUpdate(req.params.id, {
+    const group = await GroupModel.findByIdAndUpdate(req.params.id, {
       $push: { messageHistory: message },
     })
-    res.sendStatus(200)
+    res.status(201).send(group?.messageHistory[group.messageHistory.length - 1])
   } catch (error) {
     next(error)
   }

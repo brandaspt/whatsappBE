@@ -9,23 +9,11 @@ const router = Router()
 router
   .post("/new", JWTAuthMiddleware, controllers.createGroup)
   .get("/:id", JWTAuthMiddleware, controllers.getSingleGroup)
+  .get("/:id/history", JWTAuthMiddleware, controllers.getSingleGroupHistory)
   .put("/:id", JWTAuthMiddleware, groupAdmin, publicGroupOnly, controllers.editGroup)
-  .post(
-    "/:id/avatar",
-    JWTAuthMiddleware,
-    groupAdmin,
-    publicGroupOnly,
-    groupAvatarParser.single("avatar"),
-    controllers.changeGroupAvatar
-  )
+  .post("/:id/avatar", JWTAuthMiddleware, groupAdmin, publicGroupOnly, groupAvatarParser.single("avatar"), controllers.changeGroupAvatar)
   .post("/:id/invite", JWTAuthMiddleware, publicGroupOnly, controllers.invitePeople)
-  .get(
-    "/:id/ban/:uId",
-    JWTAuthMiddleware,
-    groupAdmin,
-    publicGroupOnly,
-    controllers.banUser
-  )
+  .get("/:id/ban/:uId", JWTAuthMiddleware, groupAdmin, publicGroupOnly, controllers.banUser)
   .delete("/:id", JWTAuthMiddleware, groupAdmin, controllers.deleteGroup)
   .get("/:id/leave", JWTAuthMiddleware, publicGroupOnly, controllers.leaveGroup)
   .post("/:id/message", JWTAuthMiddleware, controllers.newMessage)
