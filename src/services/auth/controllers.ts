@@ -5,7 +5,7 @@ import { refreshTokens } from "./tools"
 import UserModel from "../users/model"
 
 export const refresh: TController = async (req, res, next) => {
-  const { refreshToken } = req.body
+  const { refreshToken } = req.cookies
   if (!refreshToken) return next(createError(400, "Refresh token must be provided"))
   try {
     const tokens = await refreshTokens(refreshToken)
@@ -13,12 +13,12 @@ export const refresh: TController = async (req, res, next) => {
     res.cookie("accessToken", tokens.accessToken, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production" ? true : false,
-      sameSite: "none",
+      // sameSite: "none",
     })
     res.cookie("refreshToken", tokens.refreshToken, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production" ? true : false,
-      sameSite: "none",
+      // sameSite: "none",
     })
     res.status(204).send()
   } catch (error) {
@@ -35,12 +35,12 @@ export const registerUser: TController = async (req, res, next) => {
     res.cookie("accessToken", accessToken, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production" ? true : false,
-      sameSite: "none",
+      // sameSite: "none",
     })
     res.cookie("refreshToken", refreshToken, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production" ? true : false,
-      sameSite: "none",
+      // sameSite: "none",
     })
     res.status(204).send()
   } catch (error) {
@@ -57,12 +57,12 @@ export const loginUser: TController = async (req, res, next) => {
     res.cookie("accessToken", accessToken, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production" ? true : false,
-      sameSite: "none",
+      // sameSite: "none",
     })
     res.cookie("refreshToken", refreshToken, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production" ? true : false,
-      sameSite: "none",
+      // sameSite: "none",
     })
     res.status(204).send()
   } catch (error) {
