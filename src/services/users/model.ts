@@ -24,7 +24,6 @@ const UserSchema = new Schema<IUserDocument, IUserModel>(
     },
     password: String,
     avatar: String,
-    bio: String,
     status: String,
     refreshToken: String,
   },
