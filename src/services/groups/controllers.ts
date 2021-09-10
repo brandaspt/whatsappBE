@@ -128,8 +128,10 @@ export const invitePeople: TController = async (req, res, next) => {
 
     const allGroupUsers = [...group.users, ...notExistingUsers]
 
-    await GroupModel.findByIdAndUpdate(group._id, { $set: { users: allGroupUsers } })
-    res.send(notExistingUsers.map((u: any) => u._id))
+    const updatedGroup = await GroupModel.findByIdAndUpdate(group._id, {
+      $set: { users: allGroupUsers },
+    })
+    res.send({ addedUsers: notExistingUsers.map((u: any) => u._id), updatedGroup })
   } catch (error) {
     next(error)
   }
