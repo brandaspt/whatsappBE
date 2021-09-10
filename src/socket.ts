@@ -32,10 +32,10 @@ io.on("connection", (socket) => {
     const users = data.users
     const group = data.group
     const myId = data.myId
+
     const userIdArray = Object.keys(users)
     const userSockets = userIdArray.map((u: string) => sockets[u])
 
-    socket.join(group._id)
     for (const socketInvited of userSockets) {
       socketInvited.join(group._id)
     }
@@ -45,6 +45,27 @@ io.on("connection", (socket) => {
       .filter((id) => id !== sockets[myId].id)
 
     io.to(userSocketsId).emit("invited", { group, users })
+  })
+
+  socket.on("inviteToPrivate", ({ users, group, myId }) => {
+    const userIdArray = Object.keys(users)
+    const userSockets = userIdArray.map((u: string) => sockets[u])
+
+    for (const socketInvited of userSockets) {
+      socketInvited.join(group._id)
+    }
+
+    const userSocketsId = userIdArray
+      .map((u: string) => sockets[u].id)
+      .filter((id) => id !== sockets[myId].id)
+    io.to(userSocketsId).emit("invited", { group, users })
+  })
+
+  socket.on("typing", (groupId) => {
+    socket.broadcast.to(groupId).emit("typing", {
+      groupId,
+      userId: Object.keys(sockets).find((key) => sockets[key].id === socket.id),
+    })
   })
 })
 
